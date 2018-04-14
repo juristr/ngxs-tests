@@ -5,39 +5,36 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 // components
-import * as fromComponents from './components';
+import {
+  PizzaItemComponent,
+  PizzaFormComponent,
+  PizzaDisplayComponent,
+  PizzaToppingsComponent
+} from './components';
 
 // containers
-import * as fromContainers from './containers';
+import { ProductsComponent, ProductItemComponent } from './containers';
 
 // services
-import * as fromServices from './services';
-
-// routes
-export const ROUTES: Routes = [
-  {
-    path: '',
-    component: fromContainers.ProductsComponent,
-  },
-  {
-    path: ':id',
-    component: fromContainers.ProductItemComponent,
-  },
-  {
-    path: 'new',
-    component: fromContainers.ProductItemComponent,
-  },
-];
+import { PizzasService, ToppingsService } from './services';
+import { ProductsRoutingModule } from './products-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forChild(ROUTES),
+    ProductsRoutingModule
   ],
-  providers: [...fromServices.services],
-  declarations: [...fromContainers.containers, ...fromComponents.components],
-  exports: [...fromContainers.containers, ...fromComponents.components],
+  providers: [PizzasService, ToppingsService],
+  declarations: [
+    ProductsComponent,
+    ProductItemComponent,
+    PizzaItemComponent,
+    PizzaFormComponent,
+    PizzaDisplayComponent,
+    PizzaToppingsComponent
+  ],
+  exports: [ProductsComponent, ProductItemComponent, PizzaItemComponent]
 })
 export class ProductsModule {}
