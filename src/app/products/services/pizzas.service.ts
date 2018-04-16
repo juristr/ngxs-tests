@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import 'rxjs/add/observable/throw';
+import { _throw } from 'rxjs/observable/throw';
 
 import { Pizza } from '../models/pizza.model';
 
@@ -14,7 +15,7 @@ export class PizzasService {
   getPizzas(): Observable<Pizza[]> {
     return this.http
       .get<Pizza[]>(`/api/pizzas`)
-      .pipe(catchError((error: any) => Observable.throw(error.json())));
+      .pipe(catchError((error: any) => _throw(error.json())));
   }
 
   createPizza(payload: Pizza): Observable<Pizza> {

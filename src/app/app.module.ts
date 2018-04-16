@@ -2,19 +2,20 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { StoreModule, MetaReducer } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { NgxsModule } from '@ngxs/store';
+// import { StoreModule, MetaReducer } from '@ngrx/store';
+// import { EffectsModule } from '@ngrx/effects';
 
 // not used in production
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { storeFreeze } from 'ngrx-store-freeze';
+// import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+// import { storeFreeze } from 'ngrx-store-freeze';
 
 // this would be done dynamically with webpack for builds
 import { environment } from '../environments/environment';
 
-export const metaReducers: MetaReducer<any>[] = !environment.production
-  ? [storeFreeze]
-  : [];
+// export const metaReducers: MetaReducer<any>[] = !environment.production
+//   ? [storeFreeze]
+//   : [];
 
 // bootstrap
 import { AppComponent } from './app.component';
@@ -25,9 +26,10 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, { metaReducers }),
-    EffectsModule.forRoot([]),
-    environment.production ? [] : StoreDevtoolsModule.instrument()
+    // StoreModule.forRoot({}, { metaReducers }),
+    NgxsModule.forRoot([])
+    // EffectsModule.forRoot([]),
+    // environment.production ? [] : StoreDevtoolsModule.instrument()
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]
