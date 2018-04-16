@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 // import { StoreModule, MetaReducer } from '@ngrx/store';
 // import { EffectsModule } from '@ngrx/effects';
 
@@ -27,7 +28,10 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     // StoreModule.forRoot({}, { metaReducers }),
-    NgxsModule.forRoot([])
+    NgxsModule.forRoot([]),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      disabled: environment.production
+    })
     // EffectsModule.forRoot([]),
     // environment.production ? [] : StoreDevtoolsModule.instrument()
   ],
