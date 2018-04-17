@@ -7,7 +7,7 @@ import { PizzaState } from './pizza.state';
 })
 export class ProductsState {
   @Selector()
-  static pizzas(state) {
+  static getAllPizzas(state) {
     return state.pizzas.data;
   }
 }
