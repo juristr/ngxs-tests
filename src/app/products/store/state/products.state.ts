@@ -1,13 +1,19 @@
-import { State, Selector } from '@ngxs/store';
-import { PizzaState } from './pizza.state';
+import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { PizzaState, PizzaStateModel } from './pizza.state';
+import { LoadPizzas } from '../actions/pizzas.action';
 
-@State({
+interface ProductsStateModel {
+  pizzas: PizzaStateModel;
+}
+
+@State<ProductsStateModel>({
   name: 'products',
   children: [PizzaState]
 })
 export class ProductsState {
   @Selector()
-  static getAllPizzas(state) {
-    return state.pizzas.data;
+  static getAllPizzas(state: ProductsStateModel) {
+    const entities = state.pizzas.entities;
+    return Object.keys(entities).map(id => entities[+id]);
   }
 }

@@ -7,6 +7,7 @@ import { PizzasService } from '../../services/pizzas.service';
 import { Observable } from 'rxjs';
 import { PizzaState } from '../../store/state/pizza.state';
 import { ProductsState } from '../../store/state/products.state';
+import { LoadPizzas } from '../../store/actions/pizzas.action';
 
 @Component({
   selector: 'products',
@@ -37,5 +38,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(private store: Store) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.store.dispatch(new LoadPizzas());
+  }
 }

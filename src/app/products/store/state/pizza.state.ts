@@ -1,54 +1,66 @@
-import { State } from '@ngxs/store';
+import { State, StateContext, Action } from '@ngxs/store';
+import {
+  LoadPizzas,
+  LoadPizzasSuccess,
+  LoadPizzasFail
+} from '../actions/pizzas.action';
+import { PizzasService } from '../../services';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs/internal/observable/of';
+import { Pizza } from '../../models/pizza.model';
 
-@State({
+export interface PizzaStateModel {
+  entities: { [id: number]: Pizza };
+  loaded: boolean;
+  loading: boolean;
+}
+
+@State<PizzaStateModel>({
   name: 'pizzas',
   defaults: {
-    data: [
-      {
-        name: 'Seaside Surfin',
-        toppings: [
-          {
-            id: 6,
-            name: 'mushroom'
-          },
-          {
-            id: 7,
-            name: 'olive'
-          },
-          {
-            id: 2,
-            name: 'bacon'
-          },
-          {
-            id: 3,
-            name: 'basil'
-          },
-          {
-            id: 1,
-            name: 'anchovy'
-          },
-          {
-            id: 8,
-            name: 'onion'
-          },
-          {
-            id: 11,
-            name: 'sweetcorn'
-          },
-          {
-            id: 9,
-            name: 'pepper'
-          },
-          {
-            id: 5,
-            name: 'mozzarella'
-          }
-        ],
-        id: 2
-      }
-    ],
+    entities: {},
     loaded: false,
     loading: true
   }
 })
-export class PizzaState {}
+export class PizzaState {
+  constructor(private pizzaService: PizzasService) {}
+
+  @Action(LoadPizzas)
+  loadPizzas(
+    { getState, setState, dispatch }: StateContext<PizzaStateModel>,
+    loadPizzas: LoadPizzas
+  ) {
+    return this.pizzaService
+      .getPizzas()
+      .pipe(
+        map(pizzas => dispatch(new LoadPizzasSuccess(pizzas))),
+        catchError(error => dispatch(of(new LoadPizzasFail(error))))
+      );
+  }
+
+  @Action(LoadPizzasSuccess)
+  loadPizzasSuccess(
+    { getState, setState }: StateContext<PizzaStateModel>,
+    { payload }: LoadPizzasSuccess
+  ) {
+    const pizzas = payload;
+
+    const entities = pizzas.reduce(
+      (entities: { [id: number]: Pizza }, pizza) => {
+        return {
+          ...entities,
+          [pizza.id]: pizza
+        };
+      },
+      {
+        ...getState().entities
+      }
+    );
+
+    setState({
+      ...getState(),
+      entities
+    });
+  }
+}
