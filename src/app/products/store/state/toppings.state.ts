@@ -35,10 +35,10 @@ export class ToppingsState {
     return state.loaded;
   }
 
-  // @Selector()
-  // static getSelectedToppings(state: ToppingsStateModel) {
-  //   return state.selectedToppings;
-  // }
+  @Selector()
+  static getSelectedToppingsEntities(state: ToppingsStateModel) {
+    return state.selectedToppings.map(toppingId => state.entities[toppingId]);
+  }
 
   @Action(LoadToppings)
   loadToppings(

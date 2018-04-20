@@ -28,11 +28,9 @@ export class ProductsState {
 
   @Selector()
   static getPizzaVisualized(state: ProductsStateModel) {
-    // const selectedPizza = PizzaState.getSelectedPizza(state.pizzas);
-    const selectedPizza = state.pizzas.selectedPizza;
-    // const toppings = ToppingsState.getSelectedToppings(state.toppings).map(
-    //   x => state.toppings.entities[x]
-    // );
+    const selectedPizza = PizzaState.getSelectedPizza(state.pizzas);
+    // const selectedPizza = state.pizzas.selectedPizza;
+    // const toppings = ToppingsState.getSelectedToppingsEntities(state);
     const toppings = state.toppings.selectedToppings.map(
       id => state.toppings.entities[id]
     );
