@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { tap, withLatestFrom, take } from 'rxjs/operators';
+import { tap, withLatestFrom, take, map } from 'rxjs/operators';
 import { Pizza } from '../../models/pizza.model';
 import { Topping } from '../../models/topping.model';
 import { SelectPizza } from '../../store/actions/pizzas.action';
@@ -37,7 +37,8 @@ import {
 export class ProductItemComponent implements OnInit {
   @Select(PizzaState.getSelectedPizza) pizza$: Observable<Pizza>;
   @Select(ProductsState.getPizzaVisualized) visualise$: Observable<Pizza>;
-  @Select(ProductsState.getAllToppings) toppings$: Observable<Topping[]>;
+  // @Select(ProductsState.getAllToppings) toppings$: Observable<Topping[]>; // doesn't work
+  toppings$: Observable<Topping[]>;
 
   constructor(private store: Store, private route: ActivatedRoute) {}
 
@@ -61,11 +62,9 @@ export class ProductItemComponent implements OnInit {
       )
       .subscribe();
 
-    this.toppings$.pipe(
-      tap(data => {
-        console.log('all toppings', data);
-      })
-    );
+    this.toppings$ = this.store
+      .select(state => state.products.toppings.entities)
+      .pipe(map(entities => Object.keys(entities).map(id => entities[+id])));
   }
 
   onSelect(event: number[]) {

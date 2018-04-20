@@ -104,8 +104,13 @@ export class ToppingsState {
     { getState, setState, patchState }: StateContext<ToppingsStateModel>,
     { payload }: VisualizeToppings
   ) {
-    patchState({
+    setState({
+      ...getState(),
       selectedToppings: payload
     });
+
+    // patchState({
+    //   selectedToppings: payload
+    // });
   }
 }
