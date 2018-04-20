@@ -1,6 +1,6 @@
 import { Action, State, StateContext, Selector } from '@ngxs/store';
 import { of } from 'rxjs/internal/observable/of';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Topping } from '../../models/topping.model';
 import { ToppingsService } from '../../services';
 import { LoadPizzas } from '../actions/pizzas.action';
@@ -104,14 +104,8 @@ export class ToppingsState {
     { getState, setState, patchState }: StateContext<ToppingsStateModel>,
     { payload }: VisualizeToppings
   ) {
-    console.log('visualizing toppings', payload);
-
     patchState({
       selectedToppings: payload
     });
-    // setState({
-    //   ...getState(),
-    //   selectedToppings: payload
-    // });
   }
 }

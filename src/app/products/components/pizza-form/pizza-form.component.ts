@@ -5,17 +5,17 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   FormArray,
   FormBuilder,
-  Validators,
+  Validators
 } from '@angular/forms';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Pizza } from '../../models/pizza.model';
 import { Topping } from '../../models/topping.model';
@@ -23,14 +23,15 @@ import { Topping } from '../../models/topping.model';
 @Component({
   selector: 'pizza-form',
   styleUrls: ['pizza-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="pizza-form">
       <form [formGroup]="form">
-      
+
         <label>
           <h4>Pizza name</h4>
-          <input 
-            type="text" 
+          <input
+            type="text"
             formControlName="name"
             placeholder="e.g. Pepperoni"
             class="pizza-form__input"
@@ -41,7 +42,7 @@ import { Topping } from '../../models/topping.model';
             <p>Pizza must have a name</p>
           </div>
         </label>
-      
+
         <ng-content></ng-content>
 
         <label>
@@ -84,7 +85,7 @@ import { Topping } from '../../models/topping.model';
 
       </form>
     </div>
-  `,
+  `
 })
 export class PizzaFormComponent implements OnChanges {
   exists = false;
@@ -99,7 +100,7 @@ export class PizzaFormComponent implements OnChanges {
 
   form = this.fb.group({
     name: ['', Validators.required],
-    toppings: [[]],
+    toppings: [[]]
   });
 
   constructor(private fb: FormBuilder) {}
@@ -113,6 +114,8 @@ export class PizzaFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log('pizza form changes', changes);
+
     if (this.pizza && this.pizza.id) {
       this.exists = true;
       this.form.patchValue(this.pizza);
@@ -120,7 +123,8 @@ export class PizzaFormComponent implements OnChanges {
     this.form
       .get('toppings')
       .valueChanges.pipe(
-        map(toppings => toppings.map((topping: Topping) => topping.id))
+        map(toppings => toppings.map((topping: Topping) => topping.id)),
+        tap(() => console.log('pizza form -> toppings changed'))
       )
       .subscribe(value => this.selected.emit(value));
   }

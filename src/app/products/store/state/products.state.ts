@@ -26,29 +26,22 @@ export class ProductsState {
     return Object.keys(entities).map(id => entities[+id]);
   }
 
-  @Selector(state => state.toppings)
-  static getPizzaVisualized(...args) {
-    console.log(...args);
+  @Selector()
+  static getPizzaVisualized(state: ProductsStateModel) {
+    // const selectedPizza = PizzaState.getSelectedPizza(state.pizzas);
+    const selectedPizza = state.pizzas.selectedPizza;
+    // const toppings = ToppingsState.getSelectedToppings(state.toppings).map(
+    //   x => state.toppings.entities[x]
+    // );
+    const toppings = state.toppings.selectedToppings.map(
+      id => state.toppings.entities[id]
+    );
+
+    const result = {
+      ...selectedPizza,
+      toppings
+    };
+
+    return result;
   }
-
-  // @Selector()
-  // static getPizzaVisualized(state: ProductsStateModel) {
-  //   // const selectedPizza = PizzaState.getSelectedPizza(state.pizzas);
-  //   const selectedPizza = state.pizzas.selectedPizza;
-  //   // const toppings = ToppingsState.getSelectedToppings(state.toppings).map(
-  //   //   x => state.toppings.entities[x]
-  //   // );
-  //   const toppings = state.toppings.selectedToppings.map(
-  //     id => state.toppings.entities[id]
-  //   );
-
-  //   const result = {
-  //     ...selectedPizza,
-  //     toppings
-  //   };
-
-  //   console.log('Visualized pizza', result);
-
-  //   return result;
-  // }
 }

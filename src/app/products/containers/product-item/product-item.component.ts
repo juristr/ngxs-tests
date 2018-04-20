@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -8,11 +8,15 @@ import { Topping } from '../../models/topping.model';
 import { SelectPizza } from '../../store/actions/pizzas.action';
 import { ProductsState } from '../../store/state/products.state';
 import { PizzaState } from '../../store/state/pizza.state';
-import { VisualizeToppings } from '../../store/actions/toppings.action';
+import {
+  VisualizeToppings,
+  LoadToppings
+} from '../../store/actions/toppings.action';
 
 @Component({
   selector: 'product-item',
   styleUrls: ['product-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       class="product-item">
@@ -31,10 +35,8 @@ import { VisualizeToppings } from '../../store/actions/toppings.action';
   `
 })
 export class ProductItemComponent implements OnInit {
-  // @Select(PizzaState.getSelectedPizza) pizza$: Observable<Pizza>;
-  // @Select(state => state.products.pizzas.selectedPizza)
-  // pizza$: Observable<Pizza>;
-  // @Select(ProductsState.getPizzaVisualized) visualise$: Observable<Pizza>;
+  @Select(PizzaState.getSelectedPizza) pizza$: Observable<Pizza>;
+  @Select(ProductsState.getPizzaVisualized) visualise$: Observable<Pizza>;
   @Select(ProductsState.getAllToppings) toppings$: Observable<Topping[]>;
 
   constructor(private store: Store, private route: ActivatedRoute) {}
@@ -43,34 +45,31 @@ export class ProductItemComponent implements OnInit {
     this.route.params
       .pipe(
         tap(params => {
-          this.store.dispatch(new SelectPizza(+params['id']));
-          // .pipe(withLatestFrom(this.pizza$), take(1))
-          // .subscribe(values => {
-          //   console.log('Got these values from dispatch', values);
-          //   const pizza = values[1];
-          //   const pizzaExists = !!(pizza && pizza.toppings);
-          //   const toppings = pizzaExists
-          //     ? pizza.toppings.map(topping => topping.id)
-          //     : [];
+          this.store
+            .dispatch(new SelectPizza(+params['id']))
+            .pipe(withLatestFrom(this.pizza$))
+            .subscribe(values => {
+              const pizza = values[1];
+              const pizzaExists = !!(pizza && pizza.toppings);
+              const toppings = pizzaExists
+                ? pizza.toppings.map(topping => topping.id)
+                : [];
 
-          //   this.store.dispatch(new VisualizeToppings(toppings));
-          // });
+              this.store.dispatch(new VisualizeToppings(toppings));
+            });
         })
       )
       .subscribe();
 
-    // this.store
-    //   .select(ProductsState.getPizzaVisualized)
-    //   .pipe(
-    //     tap(data => {
-    //       console.log('subscribe of visualized pizza', data);
-    //     })
-    //   )
-    //   .subscribe();
+    this.toppings$.pipe(
+      tap(data => {
+        console.log('all toppings', data);
+      })
+    );
   }
 
   onSelect(event: number[]) {
-    console.log('selecting new toppings');
+    console.log('click handler select toppings', event);
     this.store.dispatch(new VisualizeToppings(event));
   }
 

@@ -107,7 +107,6 @@ export class PizzaState {
     { getState, setState }: StateContext<PizzaStateModel>,
     { payload }: SelectPizza
   ) {
-    console.log('selecting pizza', payload);
     const selectedPizza = getState().entities[payload];
 
     setState({
