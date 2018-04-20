@@ -17,6 +17,7 @@ import {
   VisualizeToppings,
   LoadToppings
 } from '../../store/actions/toppings.action';
+import { ToppingsState } from '../../store/state/toppings.state';
 
 @Component({
   selector: 'product-item',
@@ -42,7 +43,7 @@ import {
 export class ProductItemComponent implements OnInit {
   @Select(PizzaState.getSelectedPizza) pizza$: Observable<Pizza>;
   @Select(ProductsState.getPizzaVisualized) visualise$: Observable<Pizza>;
-  // @Select(ProductsState.getAllToppings) toppings$: Observable<Topping[]>; // doesn't work
+  // @Select(ToppingsState.getAllToppings) toppings$: Observable<Topping[]>; // doesn't work
   toppings$: Observable<Topping[]>;
 
   constructor(private store: Store, private route: ActivatedRoute) {}

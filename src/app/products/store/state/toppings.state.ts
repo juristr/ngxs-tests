@@ -36,6 +36,11 @@ export class ToppingsState {
   }
 
   @Selector()
+  static getAllToppings(state: ToppingsStateModel) {
+    return Object.keys(state.entities).map(id => state.entities[+id]);
+  }
+
+  @Selector()
   static getSelectedToppingsEntities(state: ToppingsStateModel) {
     return state.selectedToppings.map(toppingId => state.entities[toppingId]);
   }
