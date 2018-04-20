@@ -5,7 +5,12 @@ import { Observable } from 'rxjs';
 import { tap, withLatestFrom, take, map } from 'rxjs/operators';
 import { Pizza } from '../../models/pizza.model';
 import { Topping } from '../../models/topping.model';
-import { SelectPizza } from '../../store/actions/pizzas.action';
+import {
+  SelectPizza,
+  CreatePizza,
+  UpdatePizza,
+  DeletePizza
+} from '../../store/actions/pizzas.action';
 import { ProductsState } from '../../store/state/products.state';
 import { PizzaState } from '../../store/state/pizza.state';
 import {
@@ -72,9 +77,15 @@ export class ProductItemComponent implements OnInit {
     this.store.dispatch(new VisualizeToppings(event));
   }
 
-  onCreate(event: Pizza) {}
+  onCreate(event: Pizza) {
+    this.store.dispatch(new CreatePizza(event));
+  }
 
-  onUpdate(event: Pizza) {}
+  onUpdate(event: Pizza) {
+    this.store.dispatch(new UpdatePizza(event));
+  }
 
-  onRemove(event: Pizza) {}
+  onRemove(event: Pizza) {
+    this.store.dispatch(new DeletePizza(event));
+  }
 }

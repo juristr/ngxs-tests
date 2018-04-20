@@ -3,13 +3,19 @@ import {
   LoadPizzas,
   LoadPizzasSuccess,
   LoadPizzasFail,
-  SelectPizza
+  SelectPizza,
+  CreatePizza,
+  CreatePizzaSuccess,
+  CreatePizzaFail,
+  DeletePizza,
+  UpdatePizza
 } from '../actions/pizzas.action';
 import { PizzasService } from '../../services';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { Pizza } from '../../models/pizza.model';
 import { ToppingsState } from './toppings.state';
+import { Router } from '@angular/router';
 
 export class PizzaStateModel {
   entities: { [id: number]: Pizza };
@@ -28,7 +34,7 @@ export class PizzaStateModel {
   }
 })
 export class PizzaState {
-  constructor(private pizzaService: PizzasService) {}
+  constructor(private pizzaService: PizzasService, private router: Router) {}
 
   @Selector()
   static getSelectedPizza(state: PizzaStateModel) {
@@ -113,5 +119,81 @@ export class PizzaState {
       ...getState(),
       selectedPizza
     });
+  }
+
+  @Action(CreatePizza)
+  createPizza(
+    { dispatch }: StateContext<PizzaStateModel>,
+    { payload }: CreatePizza
+  ) {
+    return this.pizzaService
+      .createPizza(payload)
+      .pipe(
+        map(pizza => dispatch(new CreatePizzaSuccess(pizza))),
+        catchError(err => dispatch(new CreatePizzaFail(err)))
+      );
+  }
+
+  @Action(CreatePizzaSuccess)
+  createPizzaSuccess(
+    { getState, setState }: StateContext<PizzaStateModel>,
+    { payload }: CreatePizzaSuccess
+  ) {
+    const entities = {
+      ...getState().entities,
+      [payload.id]: payload
+    };
+
+    setState({
+      ...getState(),
+      entities
+    });
+
+    this.router.navigate(['/products']);
+  }
+
+  @Action(UpdatePizza)
+  updatePizza(
+    { getState, setState }: StateContext<PizzaStateModel>,
+    { payload }: UpdatePizza
+  ) {
+    return this.pizzaService.updatePizza(payload).pipe(
+      tap(pizza => {
+        const entities = {
+          ...getState().entities,
+          [payload.id]: payload
+        };
+
+        setState({
+          ...getState(),
+          entities
+        });
+      }),
+      tap(() => {
+        this.router.navigate(['/products']);
+      })
+    );
+  }
+
+  @Action(DeletePizza)
+  deletePizza(
+    { getState, setState }: StateContext<PizzaStateModel>,
+    { payload }: DeletePizza
+  ) {
+    const pizza = payload;
+
+    return this.pizzaService.removePizza(payload).pipe(
+      tap(() => {
+        const { [pizza.id]: removed, ...result } = getState().entities;
+
+        setState({
+          ...getState(),
+          entities: result
+        });
+      }),
+      tap(() => {
+        this.router.navigate(['/products']);
+      })
+    );
   }
 }

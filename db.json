@@ -51,16 +51,6 @@
   ],
   "pizzas": [
     {
-      "name": "Juri",
-      "toppings": [
-        {
-          "id": 6,
-          "name": "mushroom"
-        }
-      ],
-      "id": 99
-    },
-    {
       "name": "Seaside Surfin'",
       "toppings": [
         {
@@ -152,36 +142,10 @@
           "name": "chili"
         }
       ],
-      "id": 5
-    },
-    {
-      "name": "Pepperoni Pizza",
-      "toppings": [
-        {
-          "id": 2,
-          "name": "bacon"
-        },
-        {
-          "id": 6,
-          "name": "mushroom"
-        },
-        {
-          "id": 7,
-          "name": "olive"
-        },
-        {
-          "id": 3,
-          "name": "basil"
-        },
-        {
-          "id": 4,
-          "name": "chili"
-        }
-      ],
       "id": 6
     },
     {
-      "name": "Pepperoni Pizza",
+      "name": "Pepperoni Pizza (Juri)",
       "toppings": [
         {
           "id": 2,
@@ -192,71 +156,11 @@
           "name": "mushroom"
         },
         {
-          "id": 7,
-          "name": "olive"
-        },
-        {
-          "id": 3,
-          "name": "basil"
-        },
-        {
-          "id": 4,
-          "name": "chili"
+          "id": 10,
+          "name": "pepperoni"
         }
       ],
       "id": 7
-    },
-    {
-      "name": "Pepperoni Pizza",
-      "toppings": [
-        {
-          "id": 2,
-          "name": "bacon"
-        },
-        {
-          "id": 6,
-          "name": "mushroom"
-        },
-        {
-          "id": 7,
-          "name": "olive"
-        },
-        {
-          "id": 3,
-          "name": "basil"
-        },
-        {
-          "id": 4,
-          "name": "chili"
-        }
-      ],
-      "id": 8
-    },
-    {
-      "name": "Pepperoni Pizza",
-      "toppings": [
-        {
-          "id": 2,
-          "name": "bacon"
-        },
-        {
-          "id": 6,
-          "name": "mushroom"
-        },
-        {
-          "id": 7,
-          "name": "olive"
-        },
-        {
-          "id": 3,
-          "name": "basil"
-        },
-        {
-          "id": 4,
-          "name": "chili"
-        }
-      ],
-      "id": 9
     }
   ]
 }
