@@ -22,6 +22,10 @@ import { PizzasService, ToppingsService } from './services';
 import { ProductsRoutingModule } from './products-routing.module';
 import { PizzaState } from './store/state/pizza.state';
 import { ProductsState } from './store/state/products.state';
+import { ToppingsState } from './store/state/toppings.state';
+import { PizzaExistsGuard } from './guards/pizza-exists.guard';
+import { PizzasGuard } from './guards/pizzas.guard';
+import { ToppingsGuard } from './guards/toppings.guard';
 
 @NgModule({
   imports: [
@@ -29,9 +33,15 @@ import { ProductsState } from './store/state/products.state';
     ReactiveFormsModule,
     HttpClientModule,
     ProductsRoutingModule,
-    NgxsModule.forFeature([ProductsState, PizzaState])
+    NgxsModule.forFeature([ProductsState, PizzaState, ToppingsState])
   ],
-  providers: [PizzasService, ToppingsService],
+  providers: [
+    PizzasService,
+    ToppingsService,
+    PizzaExistsGuard,
+    PizzasGuard,
+    ToppingsGuard
+  ],
   declarations: [
     ProductsComponent,
     ProductItemComponent,

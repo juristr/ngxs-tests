@@ -3,20 +3,25 @@ import { Routes, RouterModule } from '@angular/router';
 
 // containers
 import { ProductsComponent, ProductItemComponent } from './containers';
+import { PizzasGuard } from './guards/pizzas.guard';
+import { ToppingsGuard } from './guards/toppings.guard';
 
 // routes
 export const ROUTES: Routes = [
   {
     path: '',
-    component: ProductsComponent
+    component: ProductsComponent,
+    canActivate: [PizzasGuard]
   },
   {
     path: ':id',
-    component: ProductItemComponent
+    component: ProductItemComponent,
+    canActivate: [PizzasGuard, ToppingsGuard]
   },
   {
     path: 'new',
-    component: ProductItemComponent
+    component: ProductItemComponent,
+    canActivate: [PizzasGuard, ToppingsGuard]
   }
 ];
 
