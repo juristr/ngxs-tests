@@ -1,6 +1,7 @@
 import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { PizzaState, PizzaStateModel } from './pizza.state';
-import { LoadPizzas } from '../actions/pizzas.action';
+import { Pizza } from '../../models/pizza.model';
+import { Topping } from '../../models/topping.model';
 import { ToppingsStateModel, ToppingsState } from './toppings.state';
 import { of } from 'rxjs/observable/of';
 
@@ -26,14 +27,10 @@ export class ProductsState {
     return Object.keys(entities).map(id => entities[+id]);
   }
 
-  @Selector()
-  static getPizzaVisualized(state: ProductsStateModel) {
-    const selectedPizza = PizzaState.getSelectedPizza(state.pizzas);
-    // const selectedPizza = state.pizzas.selectedPizza;
-    // const toppings = ToppingsState.getSelectedToppingsEntities(state);
-    const toppings = state.toppings.selectedToppings.map(
-      id => state.toppings.entities[id]
-    );
+  @Selector([PizzaState.getSelectedPizza, ToppingsState.getSelectedToppingsEntities])
+  static getPizzaVisualized(state: ProductsStateModel, selectedPizzaState: Pizza, selectedToppingsState: Topping[]) {
+    const selectedPizza = selectedPizzaState;
+    const toppings = selectedToppingsState;
 
     const result = {
       ...selectedPizza,
